@@ -1,16 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>FocusFlow – Stay Focused</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Новости с фильтром</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Подключаем Axios -->
+  <script src="https://cdn.tailwindcss.com"></script> <!-- Подключаем Tailwind CSS -->
 </head>
-<body>
-  <div class="container">
-    <h1>🧠 FocusFlow</h1>
-    <input type="text" id="filterInput" placeholder="Введите ключевое слово..." />
-    <ul id="newsList"></ul>
+<body class="bg-gray-100 font-sans text-gray-900">
+
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-semibold text-center mb-6">Новости</h1>
+
+    <!-- Поле для ввода фильтра -->
+    <div class="mb-6">
+      <label for="filterInput" class="block text-lg">Введите ключевое слово:</label>
+      <input type="text" id="filterInput" class="w-full p-3 mt-2 border rounded-lg" placeholder="Фильтруйте новости">
+    </div>
+
+    <!-- Список новостей -->
+    <ul id="newsList" class="space-y-4">
+      <!-- Новости будут отображаться здесь -->
+    </ul>
   </div>
-  <script src="script.js"></script>
+
+  <script src="app.js"></script> <!-- Подключаем JavaScript файл -->
 </body>
 </html>
