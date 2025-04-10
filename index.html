@@ -3,27 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Новости с фильтром</title>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Подключаем Axios -->
-  <script src="https://cdn.tailwindcss.com"></script> <!-- Подключаем Tailwind CSS -->
+  <title>FocusFlow</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+    }
+    #newsList {
+      list-style-type: none;
+      padding: 0;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans text-gray-900">
-
-  <div class="max-w-4xl mx-auto p-6">
-    <h1 class="text-3xl font-semibold text-center mb-6">Новости</h1>
-
-    <!-- Поле для ввода фильтра -->
-    <div class="mb-6">
-      <label for="filterInput" class="block text-lg">Введите ключевое слово:</label>
-      <input type="text" id="filterInput" class="w-full p-3 mt-2 border rounded-lg" placeholder="Фильтруйте новости">
-    </div>
-
-    <!-- Список новостей -->
-    <ul id="newsList" class="space-y-4">
-      <!-- Новости будут отображаться здесь -->
-    </ul>
+<body class="flex justify-center items-center h-screen">
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl font-semibold text-center mb-4">FocusFlow - Новости</h1>
+    <input 
+      id="filterInput" 
+      type="text" 
+      placeholder="Поиск новостей..." 
+      class="p-2 mb-4 w-full border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+    <ul id="newsList"></ul>
   </div>
 
-  <script src="app.js"></script> <!-- Подключаем JavaScript файл -->
+  <script>
+    const filterInput = document.getElementById('filterInput');
+    const newsList = document.getElementById('newsList');
+    let newsItems = [];
+
+    // Функция для отображения новостей
+    function displayNews(filter = '') {
+      newsList.innerHTML = ''; // очищаем список новостей
+      newsItems
+        .filter(item => item.title.toLowerCase().includes(filter.toLowerCase())) // фильтрация новостей по ключевому слову
+        .forEach(item => {
+          const li = document.createElement('li');
+          li.classList.add('p-4', 'bg-white', 'rounded-lg', 'shadow-md', 'hover:bg-blue-100', 'transition', 'mb-4');
+          li.innerHTML = `
+            <div class="flex">
+              <img src="${item.urlToImage || 'https://via.placeholder.com/150'}" alt="news image" class="w-32 h-32 object-cover rounded-lg mr-4">
+              <div>
+                <h2 class="text-xl font-semibold">${item.title}</h2>
+                <p class="text-sm text-gray-600">${item.description || "Описание недоступно"}</p>
+              </div>
+            </div>
+          `;
+          newsList.appendChild(li);
+        });
+    }
+
+    // Слушатель для фильтра
+    filterInput.addEventListener('input', () => {
+      displayNews(filterInput.value); // фильтруем новости по введенному запросу
+    });
+
+    // Запрос к API для получения новостей
+    axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=ae04464c9f9b48508799168a95a2caa2')
+      .then(response => {
+        console.log(response.data);
+        newsItems = response.data.articles.map(article => ({
+          title: article.title,
+          description: article.description,
+          urlToImage: article.urlToImage
+        }));
+        displayNews(); // отображаем новости после загрузки
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке данных: ', error);
+        alert("Произошла ошибка при загрузке новостей. Пожалуйста, попробуйте снова.");
+      });
+  </script>
 </body>
 </html>
