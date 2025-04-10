@@ -28,7 +28,7 @@ filterInput.addEventListener('input', () => {
 });
 
 // Запрос к API для получения новостей
-axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=ae04464c9f9b48508799168a95a2caa2')
+axios.get('https://newsapi.org/v2/everything?q=tesla&from=2025-03-10&sortBy=publishedAt&apiKey=ae04464c9f9b48508799168a95a2caa2')
   .then(response => {
     console.log(response.data);
     newsItems.length = 0; // очищаем старые новости
